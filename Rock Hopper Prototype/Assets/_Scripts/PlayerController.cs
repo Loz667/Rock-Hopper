@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,6 +19,12 @@ public class PlayerController : MonoBehaviour
     bool IsGrounded = true;
     public bool gameOver = false;
 
+    private float scoreMultiplier = 10f;
+    private float score = 0f;
+
+    [SerializeField] private UnityEvent<int> gameOverEvent;
+    [SerializeField] private UnityEvent<int> scoreUpdateEvent;
+
     private void Start()
     {
         m_RB = GetComponent<Rigidbody>();
@@ -28,6 +35,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        score += scoreMultiplier * Time.deltaTime;
+        scoreUpdateEvent.Invoke((int)score);
+
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded && !gameOver)
         {
             m_RB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -36,6 +46,12 @@ public class PlayerController : MonoBehaviour
             dirtParticle.Stop();
             m_Audio.PlayOneShot(jumpSound, 1.0f);
         }
+    }
+
+    private void GameOver()
+    {
+        gameOverEvent.Invoke((int)score);
+        gameObject.SetActive(false);
     }
 
     private void OnCollisionEnter(Collision other)
