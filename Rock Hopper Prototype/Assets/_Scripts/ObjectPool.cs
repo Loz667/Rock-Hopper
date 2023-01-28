@@ -29,11 +29,6 @@ public class ObjectPool : MonoBehaviour
         return null;
     }
 
-    public void DisableObjectInPool(GameObject obj)
-    {
-        obj.SetActive(false);
-    }
-
     private void PopulatePool()
     {
         pool = new GameObject[poolSize];

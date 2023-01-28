@@ -2,10 +2,26 @@ using UnityEngine;
 
 public class MoveLeft : MonoBehaviour
 {
-    private float speed = 20;
+    [SerializeField] private float speed = 20;
+    private float leftBound = -15;
+
+    PlayerController playerScript;
+
+    private void Start()
+    {
+        playerScript = GameObject.Find("Player").GetComponent<PlayerController>();
+    }
 
     private void Update()
     {
-        transform.Translate(Vector3.left * Time.deltaTime * speed);
+        if (playerScript.gameOver == false)
+        {
+            transform.Translate(Vector3.left * Time.deltaTime * speed);
+        }
+
+        if (transform.position.x < leftBound && gameObject.CompareTag("Obstacle"))
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

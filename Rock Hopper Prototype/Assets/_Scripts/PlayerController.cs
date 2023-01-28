@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravityMultiplier;
 
     bool IsGrounded = true;
+    public bool gameOver = false;
 
     private void Start()
     {
@@ -25,6 +26,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        IsGrounded = true;
+        if (other.collider.CompareTag("Ground"))
+        {
+            IsGrounded = true;
+        }
+        else if (other.collider.CompareTag("Obstacle"))
+        {
+            gameOver = true;
+            Debug.Log("Game Over!");
+        }
     }
 }

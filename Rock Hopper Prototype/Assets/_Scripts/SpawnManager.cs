@@ -9,22 +9,28 @@ public class SpawnManager : MonoBehaviour
     private float startDelay = 2;
     private float repeatRate = 2;
 
+    PlayerController playerScript;
+
     private void Start()
     {
         InvokeRepeating("SpawnObstacle", startDelay, repeatRate);
+        playerScript = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
     void SpawnObstacle()
     {
-        int randomPool = Random.Range(0, obstaclePools.Length);
-        GameObject obstacle = obstaclePools[randomPool].EnableObjectInPool(spawnPos);
-
-        if (obstacle == null)
+        if (playerScript.gameOver == false)
         {
-            foreach (ObjectPool pool in obstaclePools)
+            int randomPool = Random.Range(0, obstaclePools.Length);
+            GameObject obstacle = obstaclePools[randomPool].EnableObjectInPool(spawnPos);
+
+            if (obstacle == null)
             {
-                obstacle = pool.EnableObjectInPool(spawnPos);
-                if (obstacle != null) break;
+                foreach (ObjectPool pool in obstaclePools)
+                {
+                    obstacle = pool.EnableObjectInPool(spawnPos);
+                    if (obstacle != null) break;
+                }
             }
         }
     }
